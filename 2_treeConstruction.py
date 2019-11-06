@@ -3,9 +3,19 @@ import sys
 import yaml
 import os
 import subprocess
-
+import glob
 
 config_file = sys.argv[1]
+
+
+
+# Move phylip files
+
+def move_phylip(olddir, newdir):
+    l = glob.glob( olddir + "/*.txt"   )
+    for f in l:
+        basename = f.split("/")[-1]
+        os.rename( f, newdir + "/" + basename )
 
 
 # Read config
@@ -31,21 +41,30 @@ for al in alignments:
 
     gene_name = al.split("/")[-1].split(".")[0]
 
-    os.mkdir( gene_name ) 
-    outfile = "{0}/{1}/".format(  output_dir, gene_name  )
+
+    outdir = "{0}/{1}/".format(  output_dir, gene_name  )
+    try:
+        os.mkdir( outdir )
+    except FileExistsError:
+        pass
+
 
     tree_command = ["phyml", "-i", al,
                             "-d", config["datatype"],
                             "-m", config["subsmodel"],
                             "-v", config["pinvariants"],
-                            "-a", config["gammashape"]
+                            "-a", config["gammashape"],
                             "-c", config["ratecategs"],
                             "-b", config["bootstraps"],
-                            "--r_seed", config["rseed"],
+                            "--r_seed", config["rseed"]      ]
 
-            ]
+
 
     subprocess.run( tree_command )
+    move_phylip( aligned_dir, outdir )
+ 
+
+
 
 
 

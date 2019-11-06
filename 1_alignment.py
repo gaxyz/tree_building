@@ -11,7 +11,7 @@ def convert_to_phylip( multifasta, overwrite = False ):
 
     newname = multifasta.split(".")[0] + ".phy"
     aln = AlignIO.read( multifasta, "fasta" )
-    SeqIO.write( aln, newname, "phylip" )
+    AlignIO.write( aln, newname, "phylip" )
     
     if overwrite == True:
         os.remove( multifasta )
@@ -33,7 +33,7 @@ output_dir = config["outputdir"]
 mfastas = []
 
 for item in os.listdir( unaligned_dir ):
-    if os.path.isfile( unaligned_dir + "/" + item ) and ( item.split(".")[1] == "faa" or item.split(".")[1] == "fna" ) :
+    if os.path.isfile( unaligned_dir + "/" + item ):
         mfastas.append( unaligned_dir + "/" + item )
 
 
@@ -50,7 +50,7 @@ for mf in mfastas:
     subprocess.run( align_command )
 
     if config["phylip"] == "true":
-        convert_to_phylip( outfile_mfa, overwrite = True )
+        convert_to_phylip( outfile, overwrite = True )
 
 
 

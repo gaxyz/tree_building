@@ -1,11 +1,11 @@
 inputdir:
-        "./aligned"
-ouputdir:
-        "./trees"
+        "aligned"
+outputdir:
+        "trees"
 datatype:
         "aa"
 subsmodel:
-        "HKY"
+        "LG"
 pinvariants:
         "0.0"
 gammashape:
@@ -13,6 +13,6 @@ gammashape:
 ratecategs:
         "4"
 bootstraps:
-        "100"
+        "1"
 rseed:
         "1"

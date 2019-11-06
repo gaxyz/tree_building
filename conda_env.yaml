@@ -1,0 +1,16 @@
+name: tree_building
+
+channels:
+        - bioconda
+        - conda-forge
+        - defaults
+
+dependencies:
+        - python=3.6
+        - jupyter
+        - phyml
+        - muscle
+        - pyyaml
+        - biopython
+
+
