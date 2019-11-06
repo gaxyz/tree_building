@@ -1,0 +1,18 @@
+inputdir:
+        "./aligned"
+ouputdir:
+        "./trees"
+datatype:
+        "aa"
+subsmodel:
+        "HKY"
+pinvariants:
+        "0.0"
+gammashape:
+        "1.0"
+ratecategs:
+        "4"
+bootstraps:
+        "100"
+rseed:
+        "1"

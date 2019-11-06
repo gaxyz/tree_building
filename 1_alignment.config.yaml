@@ -1,0 +1,9 @@
+inputdir:
+        "./unaligned"
+outputdir:
+        "./aligned"
+seqtype:
+        "protein"
+
+phylip:
+        "true"
