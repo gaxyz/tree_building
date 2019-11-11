@@ -1,6 +1,6 @@
 treedir:
         "trees"
 matrixfile:
-        "weightedRF_dist.csv"
+        "tree-distance/euclidean_dist.csv"
 distance_method:
-        "weightedRF"
+        "quartet"
