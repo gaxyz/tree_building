@@ -4,6 +4,9 @@ import yaml
 import os
 import subprocess
 import glob
+from joblib import Parallel, delayed
+
+
 
 config_file = sys.argv[1]
 
@@ -26,7 +29,7 @@ with open( config_file, 'r' ) as handle:
 
 aligned_dir = config[ "inputdir" ]
 output_dir = config[ "outputdir" ]
-
+threads = int( config["threads"] )
 
 # Get paths to multifastas (only orthologs in each mfasta)
 alignments = []
@@ -37,7 +40,7 @@ for item in os.listdir( aligned_dir ):
 
 
 
-for al in alignments:
+def phyml( al ):
 
     gene_name = al.split("/")[-1].split(".")[0]
 
@@ -48,7 +51,6 @@ for al in alignments:
     except FileExistsError:
         pass
 
-
     tree_command = ["phyml", "-i", al,
                             "-d", config["datatype"],
                             "-m", config["subsmodel"],
@@ -57,11 +59,12 @@ for al in alignments:
                             "-c", config["ratecategs"],
                             "-b", config["bootstraps"],
                             "--r_seed", config["rseed"]      ]
-
-
-
-    subprocess.run( tree_command )
+    sys.stdout.write("Running PhyML for {0}...".format(gene_name) )
+    subprocess.run( tree_command , stdout = subprocess.DEVNULL )
     move_phylip( aligned_dir, outdir )
+
+
+Parallel( n_jobs = threads)( delayed( phyml )(al) for al in alignments )
  
 
 

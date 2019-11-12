@@ -16,3 +16,5 @@ bootstraps:
         "100"
 rseed:
         "1"
+threads:
+        "10"
