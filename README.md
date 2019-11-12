@@ -12,6 +12,8 @@ The pipelines here are not really robust in terms of data structure and naming, 
 With conda installed, run:
 
 `conda env create -f conda_env.yaml`
+
+
 `conda activate tree_building`
 
 
