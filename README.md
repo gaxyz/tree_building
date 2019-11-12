@@ -24,7 +24,11 @@ Modify \*.config.yaml files accordingly (they come with default values).
 ### Run the scripts
 
 
-./1\_alignment.py 1\_alignment.config.yaml
-./2\_treeConstruction.py 2\_treeConstruction.config.yaml
-./3\_treeDistance.py 3\_treeDistance.config.yaml
+`./1\_alignment.py 1\_alignment.config.yaml`
+
+
+`./2\_treeConstruction.py 2\_treeConstruction.config.yaml`
+
+
+`./3\_treeDistance.py 3\_treeDistance.config.yaml`
 
