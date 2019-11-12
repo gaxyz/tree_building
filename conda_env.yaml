@@ -12,5 +12,8 @@ dependencies:
         - muscle
         - pyyaml
         - biopython
+        - pandas
+        - dendropy
+        - tqdist 
 
 
