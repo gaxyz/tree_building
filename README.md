@@ -32,3 +32,14 @@ Modify \*.config.yaml files accordingly (they come with default values).
 
 `./3_treeDistance.py 3_treeDistance.config.yaml`
 
+
+
+
+# Future useful modifications
+
+1. BioPythonize applications (i.e. use biopython wrappers for phyml and muscle)
+2. Modularize functions properly
+3. Ditch config files except for large command line options. Replace them with argparse. 
+
+ 
+
