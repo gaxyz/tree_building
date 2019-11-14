@@ -128,7 +128,7 @@ for i in range(0, len(clusters)):
             d_matrix.at[  clusters[j], clusters[i] ] = distance
 
 
-sys.stdout("\n")
+print("\n")
 
 # Write distance matrix
 
