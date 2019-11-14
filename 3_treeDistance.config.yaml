@@ -1,6 +1,6 @@
 treedir:
         "trees"
-matrixfile:
-        "tree-distance/euclidean_dist.csv"
+outdir:
+        "tree-distance"
 distance_method:
         "quartet"

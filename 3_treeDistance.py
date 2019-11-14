@@ -7,8 +7,8 @@ import pandas as pd
 import numpy as np
 import yaml
 import subprocess
-
-
+import glob
+import shutil
 
 config_file = sys.argv[1] 
 
@@ -17,9 +17,13 @@ with open( config_file, 'r' ) as handle:
     config = yaml.safe_load( handle )
 
 treedir = config["treedir"]
-matrixfile = config["matrixfile"]
+outdir = config["outdir"]
 distance_method = config["distance_method"]
-clusters = os.listdir( treedir )
+treefiles = glob.glob( treedir + "/" + "*"  + ".phy_phyml_stats.txt"   ) 
+clusters = []
+for i in treefiles:
+    clusters.append( i.split(".")[0].split("/")[-1] )
+
 
 
 # Define distance calculating functions
@@ -30,11 +34,11 @@ def quartet_distance(t1, t2 ):
     t1.write(path=".tmp/t1.nwk", schema="newick")
     t2.write( path = ".tmp/t2.nwk" , schema = "newick" )
     # run tqdist
-    process = ["quartet_dist", "-v", ".tmp/t1.nwk", ".tmp/t2.nwk"]
+    process = ["quartet_dist", ".tmp/t1.nwk", ".tmp/t2.nwk"]
     proc = subprocess.Popen( process , stdout = subprocess.PIPE )
     out = proc.communicate()[0].strip()
     # remove tmp dir
-    os.remove( ".tmp" )
+    shutil.rmtree(".tmp") 
 
     return float( out )
 
@@ -75,9 +79,9 @@ def dist_from_files( cl1, cl2, distance_method = False ):
             }
 
     tns = dp.TaxonNamespace()
-    t1 = dp.Tree.get_from_path(src = treedir + "/" +  cl1 + "/" + cl1 + ".phy_phyml_tree.txt",
+    t1 = dp.Tree.get_from_path(src = treedir + "/" + cl1 + ".phy_phyml_tree.txt",
             schema = "newick" )
-    t2 = dp.Tree.get_from_path(src = treedir + "/" +  cl2 + "/" + cl2 + ".phy_phyml_tree.txt",  
+    t2 = dp.Tree.get_from_path(src = treedir + "/" + cl2 + ".phy_phyml_tree.txt",  
             schema = "newick",
             taxon_namespace = t1.taxon_namespace )
     
@@ -97,11 +101,18 @@ d_matrix = pd.DataFrame( 0, index = clusters, columns = clusters )
 
 # Read trees in each cluster into list of trees
 
+msg = "\n# Compare trees using {0} #\n".format(distance_method)
 
+print("#"*(len(msg)-2) + msg  + "#"*(len(msg)-2) + "\n"  )
+
+
+counter = 0
+total_comps = int( ( len(clusters)*( len(clusters) + 1 ) ) / 2 )
 for i in range(0, len(clusters)):
     for j in range(i, len(clusters)):
 
-        log = "Measuring {0} distance between {1} and {2}".format(distance_method, clusters[i], clusters[j])
+        counter += 1
+        log = "Comparison {3}/{4}".format(distance_method, clusters[i], clusters[j], counter, total_comps)
         if i == j:
             sys.stdout.write("\r{0}".format(log))
             sys.stdout.flush()
@@ -117,9 +128,11 @@ for i in range(0, len(clusters)):
             d_matrix.at[  clusters[j], clusters[i] ] = distance
 
 
+sys.stdout("\n")
+
 # Write distance matrix
 
-d_matrix.to_csv( matrixfile  ,sep = ",")
+d_matrix.to_csv( outdir + "/" + config["distance_method"] + "_distance.csv"  ,sep = ",")
          
             
     

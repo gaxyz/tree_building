@@ -2,7 +2,6 @@
 import sys
 import yaml
 import os
-import subprocess
 import glob
 from joblib import Parallel, delayed
 
@@ -40,10 +39,9 @@ for item in os.listdir( aligned_dir ):
 
 
 
-def phyml( al ):
+def phyml( alignment  ):
 
-    gene_name = al.split("/")[-1].split(".")[0]
-
+    gene_name = alignment.split("/")[-1].split(".")[0]
 
     outdir = "{0}/{1}/".format(  output_dir, gene_name  )
     try:
@@ -51,21 +49,29 @@ def phyml( al ):
     except FileExistsError:
         pass
 
-    tree_command = ["phyml", "-i", al,
-                            "-d", config["datatype"],
-                            "-m", config["subsmodel"],
-                            "-v", config["pinvariants"],
-                            "-a", config["gammashape"],
-                            "-c", config["ratecategs"],
-                            "-b", config["bootstraps"],
-                            "--r_seed", config["rseed"]      ]
-    sys.stdout.write("Running PhyML for {0}...".format(gene_name) )
-    subprocess.run( tree_command , stdout = subprocess.DEVNULL )
-    move_phylip( aligned_dir, outdir )
+    tree_command = "phyml -i {0} -d {1} -m {2} -v {3} -a {4} -c {5} -b {6} --r_seed {7}".format(alignment,
+                                                                                                                            config["datatype"],
+                                                                                                                            config["subsmodel"],
+                                                                                                                            config["pinvariants"],
+                                                                                                                            config["gammashape"],
+                                                                                                                            config["ratecategs"],
+                                                                                                                            config["bootstraps"],
+                                                                                                                            config["rseed"] )
+
+    os.system(tree_command) 
+   
 
 
 Parallel( n_jobs = threads)( delayed( phyml )(al) for al in alignments )
- 
+
+trees = glob.glob(  "{0}/*.txt".format(  aligned_dir   )  )
+
+for f in trees:
+
+    filename = f.split("/")[-1]
+    os.rename( f , "{0}/{1}".format( outdir, filename )   )
+
+
 
 
 
