@@ -58,7 +58,7 @@ def triplet_distance(t1, t2 ):
     out = proc.communicate()[0].strip()
    
     # remove tmp dir
-    os.remove( ".tmp" )
+    shutil.rmtree( ".tmp" )
     
     return float( out )
 
@@ -112,7 +112,7 @@ for i in range(0, len(clusters)):
     for j in range(i, len(clusters)):
 
         counter += 1
-        log = "Comparison {3}/{4}".format(distance_method, clusters[i], clusters[j], counter, total_comps)
+        log = "Comparison {0}/{1}".format(counter, total_comps)
         if i == j:
             sys.stdout.write("\r{0}".format(log))
             sys.stdout.flush()
