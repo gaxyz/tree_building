@@ -26,7 +26,9 @@ distance_method = config["distance_method"]
 treefiles = glob.glob( treedir + "/" + "*"  + ".phy_phyml_stats.txt"   )
 clusters = []
 for i in treefiles:
-    clusters.append( i.split(".")[0].split("/")[-1] )
+    
+    clusters.append( i.split("/")[-1].split(".")[0] )
+
 
 
 # Define distance calculating functions
@@ -82,7 +84,7 @@ def dist_from_files( cl1, cl2, distance_method = False ):
     tns = dp.TaxonNamespace()
     t1 = dp.Tree.get_from_path(src = treedir + "/" + cl1 + ".phy_phyml_tree.txt",
             schema = "newick" )
-    t2 = dp.Tree.get_from_path(src = treedir + "/" + cl2 + ".phy_phyml_tree.txt",
+    t2 = dp.Tree.get_from_path(src = cl2 ,
             schema = "newick",
             taxon_namespace = t1.taxon_namespace )
 
