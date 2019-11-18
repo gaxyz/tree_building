@@ -53,7 +53,7 @@ def triplet_distance(t1, t2 ):
 
     # run tqdist triplet distance
 
-    process = ["triplet_dist", "-v", ".tmp/t1.nwk", ".tmp/t2.nwk"]
+    process = ["triplet_dist", ".tmp/t1.nwk", ".tmp/t2.nwk"]
     proc = subprocess.Popen( process , stdout = subprocess.PIPE )
     out = proc.communicate()[0].strip()
    

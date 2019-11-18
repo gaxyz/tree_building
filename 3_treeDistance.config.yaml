@@ -3,4 +3,4 @@ treedir:
 outdir:
         "tree-distance"
 distance_method:
-        "euclidean"
+        "triplet"
