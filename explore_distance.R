@@ -3,7 +3,7 @@ library( pheatmap )
 library(ape)
 library(corrplot)
 library(gridExtra)
-setwd("Facultad/Taller de Bioinformatica/yuyo/tree_building/")
+setwd("~/Facultad/Taller de Bioinformatica/yuyo/tree_building/")
 
 
 # Def function to easily get tree -------------
@@ -23,8 +23,9 @@ d_methods <- c("euclidean",
                "weightedRF",
                "quartet",
                "triplet")
-matrices_list <- list()
-
+d_matrices <- list()
+nmds_matrices <- list()
+nmds_dims <- 3
 
 for ( i in 1:length(d_methods)  ){
 
@@ -35,12 +36,15 @@ for ( i in 1:length(d_methods)  ){
     d_matrix <- read.csv(file = distance_file,
                   row.names = 1)  %>% as.matrix()
 
-    matrices_list[[i]] <- d_matrix
-
+    d_matrices[[i]] <- d_matrix
+    
+    nmds_matrices[[i]] <- cmdscale( d_matrix, nmds_dims )
+    
+    
 }
 
-names( matrices_list ) <- d_methods
-
+names( d_matrices ) <- d_methods
+names( nmds_matrices ) <- d_methods
 
 # Load concatenated data  ------
 concat_d <- read.csv( file = "concatenated/distances/quartet_concatenated_distance.csv")
@@ -68,26 +72,33 @@ corrplot(corr = d_matrix,
  
 ## Explore matrices  --------------
 
-m <- matrices_list["weightedRF"][[1]]
 
-nmds <- cmdscale( m, 3 ) %>%
-    as.data.frame() %>%
-    rownames_to_column("cluster")
 
-d12 <- ggplot(nmds) +
-    geom_point( aes(x = V1, y = V2 ),
-                size = 0.4, alpha = 0.8 )
+d1<- nmds_matrices[["triplet"]]
+d2 <- nmds_matrices[["euclidean"]]
 
-d13 <- ggplot(nmds) +
-    geom_point( aes(x = V1, y = V3 ),
-                size = 0.4, alpha = 0.8  )
 
-d23 <- ggplot(nmds) +
-    geom_point( aes(x = V2, y = V3 ),
-                size = 0.4, alpha = 0.8  )
 
-size = rep(6,3)
-grid.arrange( d12, d13, d23,
-              ncol = 3, widths = size,
-              heights = size )
+corrplot( cor(d1, d2, method = "spearman") ,
+          method = "number" )
+
+pairs(d2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
