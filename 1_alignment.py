@@ -11,7 +11,7 @@ def convert_to_phylip( multifasta, overwrite = False ):
 
     newname = multifasta.split(".")[0] + ".phy"
     aln = AlignIO.read( multifasta, "fasta" )
-    AlignIO.write( aln, newname, "phylip" )
+    AlignIO.write( aln, newname, "phylip-relaxed" )
     
     if overwrite == True:
         os.remove( multifasta )
